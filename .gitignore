@@ -1,0 +1,12 @@
+# Ansible roles #
+###################
+roles/reallyenglish.ntpd*
+roles/softasap.sa-vpn-pritunl*
+
+# Ansible inventory #
+###################
+inventory
+
+# Other files #
+.DS_Store
+*.log

@@ -1,0 +1,11 @@
+---
+- name: Install iptables
+  hosts: pritunl-servers
+  become: true
+  gather_facts: False
+
+  tasks:
+    - name: Install iptables
+      apt:
+        name: iptables-persistent
+        state: present

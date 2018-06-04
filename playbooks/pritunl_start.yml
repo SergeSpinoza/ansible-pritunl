@@ -1,0 +1,6 @@
+---
+- import_playbook: base.yml
+- import_playbook: install_iptables.yml
+- import_playbook: timezone.yml
+- import_playbook: db.yml
+- import_playbook: pritunl.yml
