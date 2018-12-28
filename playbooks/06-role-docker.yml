@@ -1,0 +1,23 @@
+- name: Install docker
+  hosts: pritunl-servers
+  become: yes
+  gather_facts: True
+  vars: 
+    docker__edition: "ce"
+    docker__channel: "stable"
+    docker__version: "18.09.0"
+    docker__default_daemon_json: |
+      "log-driver": "json-file",
+      "log-opts": {
+        "max-size": "10m",
+        "max-file": "3"
+      },
+      "metrics-addr" : "0.0.0.0:9323",
+      "experimental" : true
+    docker__install_docker__compose: true
+    docker__compose_version: "1.23.1"
+    docker__users: 
+      - "spinoza"
+
+  roles:
+    - { role: "nickjj.docker", tags: ["docker"] }

@@ -1,7 +1,0 @@
----
-- name: Configure MongoDB
-  hosts: pritunl-servers
-  become: true
-
-  roles:
-    - db

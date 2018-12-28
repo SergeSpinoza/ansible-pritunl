@@ -1,7 +1,0 @@
----
-- name: Install Pritunl
-  hosts: all
-  become: true
-
-  roles: 
-    - softasap.sa-vpn-pritunl

@@ -1,0 +1,83 @@
+---
+- name: Create dirs and files
+  hosts: pritunl-servers
+  become: yes
+  gather_facts: True
+  vars: 
+    pritunl_path: "/home/docker/pritunl/"
+    pritunl_network: pritunl_net
+
+  tasks: 
+    - name: Create directory for docker
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - '/home/docker'
+
+    - name: Create directory for pritunl 
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - '{{ pritunl_path }}'
+
+    - name: Create directory for pritunl data
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - '{{ pritunl_path }}data_pritunl'
+
+    - name: Create directory for mongo data
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - '{{ pritunl_path }}data_mongo'
+
+    - name: Copy docker-compose file for pritunl
+      template:
+        src: '../templates/pritunl/docker-compose.yml'
+        dest: '{{ pritunl_path }}docker-compose.yml'
+        mode: 0644
+
+    - name: Create a network pritunl
+      docker_network:
+        name: '{{ pritunl_network }}'
+        state: present
+
+    - name: Pull and Run mongo docker container
+      docker_container:
+        name: mongodb
+        image: mongo:4.0.5
+        pull: yes
+        state: started
+        restart: yes
+        restart_policy: always
+        networks:
+          - name: '{{ pritunl_network }}'
+        volumes: 
+          - '{{ pritunl_path }}data_mongo:/data/db'
+        
+    - name: Pull and Run pritunl docker container
+      docker_container:
+        name: pritunl
+        image: jippi/pritunl:latest
+        pull: yes
+        state: started
+        restart: yes
+        restart_policy: always
+        privileged: yes
+        networks:
+          - name: '{{ pritunl_network }}'
+        ports:
+          - "30477:30477/udp"
+          - "30477:30477/tcp"
+          - "80:80/tcp"
+          - "443:443/tcp"
+          - "9700:9700/tcp"
+        volumes: 
+          - '{{ pritunl_path }}data_pritunl:/var/lib/pritunl'
+        env:
+          PRITUNL_MONGODB_URI: mongodb://mongodb:27017/pritunl

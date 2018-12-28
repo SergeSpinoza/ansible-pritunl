@@ -6,4 +6,6 @@
 - последовательно выполнить команды, находясь в корне рипозитория: 
   - `ansible-galaxy install -r environments/stage/requirements.yml`
   - `ansible-playbook -i environments/stage/inventory playbooks/pritunl_start.yml`
-- зайти через браузер на ip хоста и выполнить дальнейшую настройку Pritunl.
+- зайти через браузер на ip хоста и выполнить дальнейшую настройку Pritunl;
+- выполнить команду на сервере для получения ключа `pritunl setup-key`;
+- логин и пароль по умолчанию pritunl/pritunl.

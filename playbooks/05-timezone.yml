@@ -1,0 +1,16 @@
+---
+- name: set timezone to Europe/Moscow
+  hosts: all
+  become: true
+  gather_facts: False
+
+  tasks:
+    - name: Timezone to Europe/Moscow
+      timezone:
+        name: Europe/Moscow
+
+- name: NTP Configure
+  hosts: all
+  become: true
+  roles:
+    - role: geerlingguy.ntp
